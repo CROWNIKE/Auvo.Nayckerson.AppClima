@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "AppClima";
+}
+@model Auvo.Nayckerson.AppClima.WebMVC.Models.InformacoesDoClima
+
+<div class="jumbotron">
+    <h1>AppClima</h1>
+    <p class="lead">Com AppClima consulte as previsoes mais quentes ou frias para hoje, e para os proximos dias.</p>
+    <p><a href="@Url.Action("About")" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div >
+<div style="margin:0 auto;">
+    <div class="row" style="margin-left:0">
+        <div>
+            <div class="col-lg-4" style="margin-right: 10px; border: 3px solid #387cb4; border-radius:5px 5px;">
+                <div class="row" style="text-align: center; background-color:#387cb4; color:aliceblue;">Cidades mais quentes hoje</div>
+                <table>
+                    @foreach (var item in Model.PrevisoesMaisFrias)
+                    {
+                        <tr>
+                            <td style="padding-right:150px; font-size:10px">@item.Cidade</td>
+                            <td style="padding-right:40px; font-size:10px">@item.TemperaturaMinimaInCelsius</td>
+                            <td style="padding:0px, 20px, 40px, 0px; font-size:10px">@item.TemperaturaMaximaInCelsius</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="col-lg-4" style="margin-right: 10px; border: 3px solid #387cb4; border-radius:5px 5px;">
+                <div class="row" style="text-align: center; background-color:#387cb4; color:aliceblue;">Cidades mais frias hoje</div>
+                <table>
+                    @foreach (var item in Model.PrevisoesMaisQuentes)
+                    {
+                        <tr>
+                            <td style="padding-right:150px; font-size:10px">@item.Cidade</td>
+                            <td style="padding-right:40px; font-size:10px">@item.TemperaturaMinimaInCelsius</td>
+                            <td style="padding:0px, 20px, 40px, 0px; font-size:10px">@item.TemperaturaMaximaInCelsius</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <label>Cidade:</label>
+    <br />
+    @* DropDown com a lista de cidades selecionaveis, com atributo onchange, este que chama o DefinaCidade *@
+    @Html.DropDownList("Cidade", (IList<SelectListItem>)ViewBag.Cidades, "Selecione", new { onchange = "DefinaCidade(this.value)", style = "width: 200px" })
+    <br />
+    <br />
+
+    <div id="listaDias">
+        @Html.Partial("_ListaDias", Model.PrevisoesDaSemana)
+    </div>
+</div>
+</div>
+
+@*JavaScript para fazer a atualizacao das previsoes semanais,  *@
+<script type="text/javascript">
+    var DefinaCidade = function (cidadeId) {
+        jQuery.ajax({
+            type: "GET",
+            data: { cidadeId },
+            success: function (data) {
+                    $("#listaDias").load('@Url.Action("ListaDias","Home")' + '?cidadeId=' + cidadeId)
+                }
+            });
+    };
+</script>

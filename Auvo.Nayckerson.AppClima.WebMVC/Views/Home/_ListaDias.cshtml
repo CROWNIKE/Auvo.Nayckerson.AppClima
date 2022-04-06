@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "AppClima";
+    string cidadeSelecinoada = @ViewBag.CidadeSelecionada;
+}
+@model IEnumerable<Auvo.Nayckerson.AppClima.WebMVC.Models.PrevisaoClima>
+@using Auvo.Nayckerson.AppClima.WebMVC.Views.Helpers
+
+@if (cidadeSelecinoada != null)
+{
+    <h3 style="padding-left:40px": center">Clima para os proximos 7 dias na cidade de @cidadeSelecinoada</h3>
+}
+<table class="table">
+    @foreach (var item in Model)
+    {
+        @Html.CardOfPrevisao(item.DiaDaSemana, item.Clima, item.TemperaturaMinima, item.TemperaturaMaxima)
+    }
+
+</table>
